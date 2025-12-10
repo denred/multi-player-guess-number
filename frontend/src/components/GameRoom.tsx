@@ -84,17 +84,25 @@ export const GameRoom = () => {
                 key={player.id}
                 className="flex items-center justify-between p-2 bg-gray-50 rounded"
               >
-                <div className="flex items-center gap-2">
-                  <div className={player.id === yourId ? 'flex items-center gap-2 font-bold' : ''}>
-                    <div>
+                <div className="flex items-center gap-2 min-w-0 flex-1">
+                  <div
+                    className={
+                      player.id === yourId
+                        ? 'flex items-center gap-2 font-bold shrink-0'
+                        : 'flex items-center gap-2 shrink-0'
+                    }
+                  >
+                    <span className="whitespace-nowrap">
                       {player.name} {player.id === yourId && '(You)'}
-                    </div>
+                    </span>
                     {gameState?.currentTurnPlayerId === player.id && (
-                      <Target size={16} className="text-blue-500" />
+                      <Target size={16} className="text-blue-500 shrink-0" />
                     )}
                   </div>
                   {currentRoom.readyPlayers.includes(player.id) && (
-                    <Badge variant="outline">Ready ✓</Badge>
+                    <Badge variant="outline" className="shrink-0">
+                      Ready ✓
+                    </Badge>
                   )}
                 </div>
                 {isBot(player.name) && isWaiting && (
