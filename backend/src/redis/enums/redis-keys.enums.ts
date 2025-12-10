@@ -5,4 +5,12 @@ export enum RedisKeys {
   PLAYER_ATTEMPTS = 'player:attempts',
   GAME_HISTORY = 'game:history',
   ACTIVE_PLAYERS = 'game:active_players',
+  ROOMS = 'game:rooms',
+  ROOM_PLAYERS = 'room:players',
+  ROOM_READY_PLAYERS = 'room:ready_players',
+  ROOM_STATUS = 'room:status',
+  ROOM_SECRET = 'room:secret',
+  ROOM_PLAYER_ORDER = 'room:player_order',
+  ROOM_CURRENT_TURN = 'room:current_turn',
+  ROOM_PLAYER_ATTEMPTS = 'room:player:attempts',
 }

@@ -11,24 +11,24 @@ export class PlayersService {
 
   public async createPlayer({ name }: CreatePlayerDto): Promise<Player> {
     const id = uuidv4();
-    const client = this.redis.getClient();
 
-    await client.hSet(RedisKeys.PLAYERS, id, name);
+    await this.client.hSet(RedisKeys.PLAYERS, id, name);
 
     return { id, name };
   }
 
   public async getPlayer(id: string): Promise<Player | null> {
-    const client = this.redis.getClient();
-    const name = await client.hGet(RedisKeys.PLAYERS, id);
-    if (!name) return null;
+    const name = await this.client.hGet(RedisKeys.PLAYERS, id);
+
+    if (!name) {
+      return null;
+    }
 
     return { id, name };
   }
 
   public async getAllPlayers(): Promise<Player[]> {
-    const client = this.redis.getClient();
-    const players = await client.hGetAll(RedisKeys.PLAYERS);
+    const players = await this.client.hGetAll(RedisKeys.PLAYERS);
 
     return Object.entries(players).map(([id, name]) => ({
       id,
@@ -37,11 +37,14 @@ export class PlayersService {
   }
 
   public async deletePlayer(id: string): Promise<boolean> {
-    const client = this.redis.getClient();
-    const removed = await client.hDel(RedisKeys.PLAYERS, id);
+    const removed = await this.client.hDel(RedisKeys.PLAYERS, id);
 
-    await client.del(`${RedisKeys.PLAYER_ATTEMPTS}:${id}`);
+    await this.client.del(`${RedisKeys.PLAYER_ATTEMPTS}:${id}`);
 
     return removed === 1;
+  }
+
+  private get client() {
+    return this.redis.getClient();
   }
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GameStateDto } from './dtos/game-state.dto';
-import { GameService } from './game.service';
+import { GameService } from './services/game.service';
 import { GameState } from './types/game.types';
 
 @Controller('game')
@@ -10,11 +10,8 @@ export class GameController {
 
   @Post('start')
   @ApiOperation({ summary: 'Start a new game' })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: 'Game started successfully',
-    type: GameStateDto,
-  })
+  @ApiBody({ required: false, description: 'No body required' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: GameStateDto })
   public async startGame(): Promise<GameState> {
     return this.gameService.startGame();
   }
