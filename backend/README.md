@@ -26,6 +26,7 @@ NODE_ENV=development
 PORT=3000
 REDIS_PORT=6379
 REDIS_URL=redis://redis:6379
+CORS_ORIGIN=http://localhost:3000
 ```
 
 ## Docker Compose
