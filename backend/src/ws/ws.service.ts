@@ -389,6 +389,15 @@ export class WsService {
         winnerName: playerName,
         totalAttempts: result.totalAttempts ?? 0,
       });
+
+      const roomState = await this.roomService.getRoomState(roomId);
+
+      this.server
+        .to(roomId)
+        .emit(
+          WsEvents.ROOM_STATE_UPDATE,
+          this.mapRoomStateToPayload(roomState),
+        );
     }
 
     const gameState = await this.gameService.getGameStateForRoom(roomId);

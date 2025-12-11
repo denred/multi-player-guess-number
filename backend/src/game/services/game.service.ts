@@ -240,12 +240,12 @@ export class GameService {
 
     const status = statusRaw as GameStatus | null;
 
-    if (!secretRaw || !status || status === GameStatus.WAITING) {
-      throw new BadRequestException('Game has not started');
-    }
-
     if (status === GameStatus.FINISHED) {
       throw new BadRequestException('Game is already finished');
+    }
+
+    if (!secretRaw || !status || status === GameStatus.WAITING) {
+      throw new BadRequestException('Game has not started');
     }
 
     if (currentTurn && currentTurn !== playerId) {

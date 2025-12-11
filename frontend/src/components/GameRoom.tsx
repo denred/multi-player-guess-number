@@ -25,6 +25,8 @@ export const GameRoom = () => {
   const isReady = currentRoom.readyPlayers.includes(yourId);
   const isWaiting = currentRoom.room.status === RoomStatus.WAITING;
   const isActive = currentRoom.room.status === RoomStatus.ACTIVE;
+  const isFinished = currentRoom.room.status === RoomStatus.FINISHED;
+  const canStartGame = currentRoom.players.length >= 2;
 
   const handleSetReady = () => {
     socketService.setReady(currentRoom.room.id, yourId);
@@ -122,8 +124,8 @@ export const GameRoom = () => {
         {isWaiting && (
           <div className="space-y-2">
             {!isReady ? (
-              <Button onClick={handleSetReady} className="w-full">
-                Ready
+              <Button onClick={handleSetReady} className="w-full" disabled={!canStartGame}>
+                Ready {!canStartGame && '(Need at least 2 players)'}
               </Button>
             ) : (
               <p className="text-sm text-gray-500 text-center">
@@ -149,12 +151,14 @@ export const GameRoom = () => {
                       setGuess(e.target.value);
                       setGuessError('');
                     }}
-                    disabled={!isYourTurn}
-                    onKeyDown={(e) => e.key === 'Enter' && isYourTurn && handleSubmitGuess()}
+                    disabled={!isYourTurn || isFinished}
+                    onKeyDown={(e) =>
+                      e.key === 'Enter' && isYourTurn && !isFinished && handleSubmitGuess()
+                    }
                   />
                   {guessError && <p className="text-sm text-red-500 mt-1">{guessError}</p>}
                 </div>
-                <Button onClick={handleSubmitGuess} disabled={!isYourTurn}>
+                <Button onClick={handleSubmitGuess} disabled={!isYourTurn || isFinished}>
                   Submit
                 </Button>
               </div>
